@@ -2,21 +2,34 @@
 
 <img src="img/colab_data_imputation.png" alt="Image Alt Text" width="700"/>
 
-To run the `experiment.py` script using MLflow, follow these steps:
+### Running the MLflow Experiment Script with Poetry
 
-1. **Install MLflow**: If you haven't already installed MLflow, you can do so via pip:
-
-    ```bash
-    pip install mlflow
-    ```
-
-2. **Set up your environment**: Make sure you have your environment set up with the necessary dependencies.
-
-3. **Run the script with MLflow**: Use the following command to run `experiment.py` with MLflow:
+1. **Install Poetry**
 
     ```bash
-    mlflow server --host 127.0.0.1 --port 8080
-    mlflow run experiment.py
+    pip install poetry
     ```
 
-This command will execute `experiment.py` with MLflow tracking enabled, allowing you to log metrics, parameters, and artifacts for easy experiment tracking and management.
+2. **Install Project Dependencies** 
+
+    Install the project dependencies, including MLflow, by running the following command in your project directory:
+
+    ```bash
+    poetry install
+    ```
+
+3. **Running the Experiments** 
+
+    To run the `experiment.py` script within the Poetry environment, use the following command:
+
+    ```bash
+    poetry run python experiment.py
+    ```
+
+4. **Viewing MLflow Tracking**: 
+
+    ```bash
+    mlflow ui
+    ```
+
+After starting the MLflow UI, open your browser and go to `http://127.0.0.1:5000` to view experiment results, including parameters, metrics, and artifacts.
