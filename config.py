@@ -1,6 +1,13 @@
+
+from pathlib import Path
+
+# Get the absolute path of the current script
+current_path = Path(__file__).resolve().parent
+
 params = {'uri': 'http://127.0.0.1:8080',
             'exp_name': 'Imputation',
-            'model': 'lag-farm-collaborative', #'latent-factor', #'period-collaborative', 'grouped-average', 'farm-collaborative
+            'path': current_path,
+            'model': 'lag-farm-collaborative', # 'latent-factor', #'period-collaborative', 'grouped-average', 'farm-collaborative
             'seed': 42,
             'nord_pool': 'data/Y-NP.csv',
             'test_size' : 0.3, 
