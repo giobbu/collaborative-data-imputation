@@ -4,6 +4,7 @@ from source.models.naive.mlflow_naive_imputation import SimpleAvgImputation
 
 
 def run_grouped_avg_experiment(training_df, validation_df, **params):
+    " Run grouped average imputation experiment"
 
     # Simple Avg Imputation
     simple_avg_imputation = SimpleAvgImputation(variable_name="power_z", group_by = params['group_by'])

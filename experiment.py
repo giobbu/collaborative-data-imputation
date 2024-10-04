@@ -19,6 +19,7 @@ if __name__ == "__main__":
     mlflow.set_tracking_uri(uri=params['uri'])
     mlflow.set_experiment(params['exp_name'])
 
+    # uri and experiment name for logging
     uri = str(params['uri'])
     exp_name = params['exp_name']
 

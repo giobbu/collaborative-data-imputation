@@ -3,6 +3,7 @@ from source.utils.utils_memory import update_period2farm_and_farm2period_train, 
 from source.models.memory.mlflow_farm_filtering import FarmCollaborativeFiltering
 
 def run_farm_collaborative_experiment(training_df, validation_df, **params):
+    " Run farm-based collaborative filtering experiment "
 
     # preprocess data for period-based collaborative filtering
     _, farm2period, periodfarm2power_train = update_period2farm_and_farm2period_train(training_df)

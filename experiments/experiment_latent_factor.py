@@ -4,6 +4,7 @@ from source.models.latent_factor.mlflow_latent_factor import LatentFactorModel
 
 
 def run_latent_factor_experiment(training_df, validation_df, **params):
+    " Run latent factor model experiment"
 
     # Latent Factor Model
     lf_model = LatentFactorModel(k=params['latent_dimensions'], var_name='power_z', warm_start=params['warm_start'], verbose=True, learning_rate=params['learning_rate'], random_state=params['seed'])

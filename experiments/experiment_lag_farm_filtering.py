@@ -5,6 +5,7 @@ from source.models.memory.mlflow_lag_farm_filtering import LagFarmDataImputation
 from loguru import logger
 
 def run_lag_farm_collaborative_experiment(training_df, validation_df, **params):
+    " Run lag-farm-based collaborative filtering experiment "
 
     # create dataset with lags
     nr_lags = params['nr_lags']
