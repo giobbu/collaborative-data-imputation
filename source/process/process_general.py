@@ -129,13 +129,17 @@ def preprocess_ids(training_df, validation_df):
     validation_df = validation_df[validation_df.periodId.isin(training_df.periodId)].reset_index(drop=True)
     # Map datetimes
     periodId = training_df.periodId.unique()
+    # Dictionary where the keys are the elements from periodId, and the values are the indices of those elements in the periodId
     datetime2id_mapping = dict(zip(periodId, range(len(periodId))))
+    # Map the values in the periodId column of a pandas DataFrame using a mapping provided by datetime2id_mapping
     training_df.periodId = training_df.periodId.map(datetime2id_mapping)
     validation_df.periodId = validation_df.periodId.map(datetime2id_mapping)
     id2datetime_mapping = {v: k for k, v in datetime2id_mapping.items()}
     # Map farms
     farmId = training_df.farmId.unique()
+    # Dictionary where the keys are the elements from farmId, and the values are the indices of those elements in the farmId
     farm2id_mapping = dict(zip(farmId, range(len(farmId))))
+    # Map the values in the farmId column of a pandas DataFrame using a mapping provided by farm2id_mapping
     training_df.farmId = training_df.farmId.map(farm2id_mapping)
     validation_df.farmId = validation_df.farmId.map(farm2id_mapping)
     id2farm_mapping = {v: k for k, v in farm2id_mapping.items()}
