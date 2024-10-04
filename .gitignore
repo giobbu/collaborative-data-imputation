@@ -1,6 +1,6 @@
 # Ignore all files in this directory
 /mlruns/*
-/data/*
+/data/Y-NP.csv
 /mlartifacts/*
 
 # Ignore IPython Notebook checkpoints
