@@ -10,9 +10,6 @@ from experiments.experiment_period_filtering import run_period_collaborative_exp
 from experiments.experiment_farm_filtering import run_farm_collaborative_experiment 
 from experiments.experiment_lag_farm_filtering import run_lag_farm_collaborative_experiment
 
-import sys
-sys.path.append(params['path'])
-
 if __name__ == "__main__":
 
     # Set our tracking server uri for logging
