@@ -73,69 +73,80 @@ class Normalizer:
     @staticmethod
     def normalize_power(training_df, validation_df, id_col='farmId', power_col='power'):
         " Normalize power values using min-max scaling. "
-        try:
-            # Calculate max and min mappings for each farmId
-            max_mapping_train = training_df.groupby(id_col)[power_col].max()
-            min_mapping_train = training_df.groupby(id_col)[power_col].min()
-            # Map max and min values to each row based on farmId
-            training_df['max'] = training_df[id_col].map(max_mapping_train)
-            training_df['min'] = training_df[id_col].map(min_mapping_train)
-            validation_df['max'] = validation_df[id_col].map(max_mapping_train)
-            validation_df['min'] = validation_df[id_col].map(min_mapping_train)
-            # Normalize power values using min-max scaling
-            norm_training_df = training_df.assign(power_z=lambda row: (row[power_col] - row['min']) / (row['max'] - row['min'])).drop(['max', 'min', power_col], axis=1)
-            norm_validation_df = validation_df.assign(power_z=lambda row: (row[power_col] - row['min']) / (row['max'] - row['min'])).drop(['max', 'min', power_col], axis=1)
-            return norm_training_df, norm_validation_df, max_mapping_train, min_mapping_train
-        except Exception as e:
-            print(f"Error during normalization: {e}")
-            return None
+
+        assert isinstance(training_df, pd.DataFrame), "training_df must be a pandas DataFrame."
+        assert isinstance(validation_df, pd.DataFrame), "validation_df must be a pandas DataFrame."
+        assert id_col in training_df.columns, f"Column '{id_col}' not found in training_df."
+        assert id_col in validation_df.columns, f"Column '{id_col}' not found in validation_df."
+        assert power_col in training_df.columns, f"Column '{power_col}' not found in training_df."
+        assert power_col in validation_df.columns, f"Column '{power_col}' not found in validation_df."
+
+        # Calculate max and min mappings for each farmId
+        max_mapping_train = training_df.groupby(id_col)[power_col].max()
+        min_mapping_train = training_df.groupby(id_col)[power_col].min()
+        # Map max and min values to each row based on farmId
+        training_df['max'] = training_df[id_col].map(max_mapping_train)
+        training_df['min'] = training_df[id_col].map(min_mapping_train)
+        validation_df['max'] = validation_df[id_col].map(max_mapping_train)
+        validation_df['min'] = validation_df[id_col].map(min_mapping_train)
+        # Normalize power values using min-max scaling
+        norm_training_df = training_df.assign(power_z=lambda row: (row[power_col] - row['min']) / (row['max'] - row['min'])).drop(['max', 'min', power_col], axis=1)
+        norm_validation_df = validation_df.assign(power_z=lambda row: (row[power_col] - row['min']) / (row['max'] - row['min'])).drop(['max', 'min', power_col], axis=1)
+        return norm_training_df, norm_validation_df, max_mapping_train, min_mapping_train
+
 
     @staticmethod
     def unnormalize_power(norm_df, id_col, power_col, max_mapping, min_mapping, cols_to_unscale):
         " Unnormalize power values using min-max scaling. "
-        try:
-            # Map max and min values to each row based on farmId
-            norm_df['max'] = norm_df[id_col].map(max_mapping)
-            norm_df['min'] = norm_df[id_col].map(min_mapping)
-            # Unnormalize the specified columns
-            for col in cols_to_unscale:
-                norm_df[col] = norm_df['min'] + norm_df[col] * (norm_df['max'] - norm_df['min'])
-            # Drop unnecessary columns
-            norm_df.drop(['max', 'min', power_col], axis=1, inplace=True)
-            return norm_df
-        except Exception as e:
-            print(f"Error during unnormalization: {e}")
-            return None
+
+        assert isinstance(norm_df, pd.DataFrame), "norm_df must be a pandas DataFrame."
+        assert id_col in norm_df.columns, f"Column '{id_col}' not found in norm_df."
+        assert power_col in norm_df.columns, f"Column '{power_col}' not found in norm_df."
+        assert isinstance(max_mapping, pd.Series), "max_mapping must be a pandas Series."
+        assert isinstance(min_mapping, pd.Series), "min_mapping must be a pandas Series."
+        assert all(col in norm_df.columns for col in cols_to_unscale), "All columns in cols_to_unscale must be present in norm_df."
+
+        # Map max and min values to each row based on farmId
+        norm_df['max'] = norm_df[id_col].map(max_mapping)
+        norm_df['min'] = norm_df[id_col].map(min_mapping)
+        # Unnormalize the specified columns
+        for col in cols_to_unscale:
+            norm_df[col] = norm_df['min'] + norm_df[col] * (norm_df['max'] - norm_df['min'])
+        # Drop unnecessary columns
+        norm_df.drop(['max', 'min', power_col], axis=1, inplace=True)
+        return norm_df
+
 
 def preprocess_ids(training_df, validation_df):
-    try:
-        # Retain Ids of the training set in the validation set
-        validation_df = validation_df[validation_df.farmId.isin(training_df.farmId)]
-        validation_df = validation_df[validation_df.periodId.isin(training_df.periodId)].reset_index(drop=True)
-        # Map datetimes
-        periodId = training_df.periodId.unique()
-        datetime2id_mapping = dict(zip(periodId, range(len(periodId))))
-        training_df.periodId = training_df.periodId.map(datetime2id_mapping)
-        validation_df.periodId = validation_df.periodId.map(datetime2id_mapping)
-        id2datetime_mapping = {v: k for k, v in datetime2id_mapping.items()}
-        # Map farms
-        farmId = training_df.farmId.unique()
-        farm2id_mapping = dict(zip(farmId, range(len(farmId))))
-        training_df.farmId = training_df.farmId.map(farm2id_mapping)
-        validation_df.farmId = validation_df.farmId.map(farm2id_mapping)
-        id2farm_mapping = {v: k for k, v in farm2id_mapping.items()}
-        return training_df, validation_df, id2datetime_mapping, id2farm_mapping
-    except Exception as e:
-        print(f"Error occurred during retaining IDs: {e}")
-        return None
+    " Preprocess period and farm IDs for factorization. "
 
+    # Check input types
+    if not all(isinstance(df, pd.DataFrame) for df in [training_df, validation_df]):
+        raise TypeError("Both training_df and validation_df must be pandas DataFrames.")
+
+    # Retain Ids of the training set in the validation set
+    validation_df = validation_df[validation_df.farmId.isin(training_df.farmId)]
+    validation_df = validation_df[validation_df.periodId.isin(training_df.periodId)].reset_index(drop=True)
+    # Map datetimes
+    periodId = training_df.periodId.unique()
+    datetime2id_mapping = dict(zip(periodId, range(len(periodId))))
+    training_df.periodId = training_df.periodId.map(datetime2id_mapping)
+    validation_df.periodId = validation_df.periodId.map(datetime2id_mapping)
+    id2datetime_mapping = {v: k for k, v in datetime2id_mapping.items()}
+    # Map farms
+    farmId = training_df.farmId.unique()
+    farm2id_mapping = dict(zip(farmId, range(len(farmId))))
+    training_df.farmId = training_df.farmId.map(farm2id_mapping)
+    validation_df.farmId = validation_df.farmId.map(farm2id_mapping)
+    id2farm_mapping = {v: k for k, v in farm2id_mapping.items()}
+    return training_df, validation_df, id2datetime_mapping, id2farm_mapping
 
 
 def filter_data_by_common_periods_farms(training_df, validation_df):
     """
     Filter training and validation data to have common periods and farms.
     """
-    # Check input types
+
     if not all(isinstance(df, pd.DataFrame) for df in [training_df, validation_df]):
         raise TypeError("Both training_df and validation_df must be pandas DataFrames.")
 
@@ -165,34 +176,40 @@ def filter_data_by_common_periods_farms(training_df, validation_df):
 
 
 def sqrt_transformation(df):
-    try:
-        for col in list(df['farmId'].unique()):
-            mask = df['farmId'] == col
-            df.loc[mask, 'power_z'] = np.sqrt(df.loc[mask, 'power_z'])
-        return df
-    except Exception as e:
-        print(f"Error occurred in sqrt_transformation function: {str(e)}")
-        return None
+    " Apply square root transformation to power values. "
+
+    assert isinstance(df, pd.DataFrame), "Input must be a pandas DataFrame."
+
+    for col in list(df['farmId'].unique()):
+        mask = df['farmId'] == col
+        df.loc[mask, 'power_z'] = np.sqrt(df.loc[mask, 'power_z'])
+    return df
+
 
 
 def create_insample_df(train_periods, train_farms, train_targets, train_predictions, lst_farms):
-    try:
-        # Create DataFrame from input lists
-        df_insample = pd.DataFrame({
-            'periodId': train_periods,
-            'farmId': train_farms,
-            'targets': train_targets,
-            'predictions': train_predictions
-        })
-        df_insample = df_insample.set_index('periodId')
-        # Filter DataFrame by selected farm IDs
-        df_insample = df_insample[df_insample['farmId'].isin(lst_farms)]
-        # Calculate residuals
-        df_insample['residuals'] = df_insample['targets'] - df_insample['predictions']
-        return df_insample
-    except Exception as e:
-        print(f"An error occurred during data preprocessing: {e}")
-        return None
+    " Create DataFrame for insample data. "
+
+    assert isinstance(train_periods, list), "train_periods must be a list."
+    assert isinstance(train_farms, list), "train_farms must be a list."
+    assert isinstance(train_targets, list), "train_targets must be a list."
+    assert isinstance(train_predictions, list), "train_predictions must be a list."
+    assert isinstance(lst_farms, list), "lst_farms must be a list."
+
+    # Create DataFrame from input lists
+    df_insample = pd.DataFrame({
+        'periodId': train_periods,
+        'farmId': train_farms,
+        'targets': train_targets,
+        'predictions': train_predictions
+    })
+    df_insample = df_insample.set_index('periodId')
+    # Filter DataFrame by selected farm IDs
+    df_insample = df_insample[df_insample['farmId'].isin(lst_farms)]
+    # Calculate residuals
+    df_insample['residuals'] = df_insample['targets'] - df_insample['predictions']
+    return df_insample
+
 
 def create_outsample_df(test_periods, test_farms, test_targets, test_predictions, lst_farms):
     try:
