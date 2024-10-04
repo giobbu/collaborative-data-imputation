@@ -1,5 +1,7 @@
 # Collaborative-Data-Imputation
 
+<img src="img/colab_data_imputation.png" alt="Image Alt Text" width="700"/>
+
 To run the `experiment.py` script using MLflow, follow these steps:
 
 1. **Install MLflow**: If you haven't already installed MLflow, you can do so via pip:
