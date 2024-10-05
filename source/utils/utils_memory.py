@@ -34,22 +34,17 @@ def update_period2farm_and_farm2period_train(df):
 def update_period2farm_and_farm2period_test(df):
     """
     Update dictionary to map periodfarm to power_z values for test data.
-
-    Args:
-    - df (pandas.DataFrame): DataFrame containing test data with columns 'periodId', 'farmId', and 'power_z'.
-
-    Returns:
-    - periodfarm2power_test (dict): Dictionary mapping (periodId, farmId) tuples to power_z values for test data.
     """
-    if not isinstance(df, pd.DataFrame):
-        raise TypeError("Input df must be a pandas DataFrame.")
-    if 'periodId' not in df.columns or 'farmId' not in df.columns or 'power_z' not in df.columns:
-        raise ValueError("DataFrame df must contain columns 'periodId', 'farmId', and 'power_z'.")
+    
+    assert isinstance(df, pd.DataFrame), "Input df must be a pandas DataFrame."
+    assert 'periodId' in df.columns and 'farmId' in df.columns and 'power_z' in df.columns, "DataFrame df must contain columns 'periodId', 'farmId', and 'power_z'."
+
+    # Initialize dictionary
     periodfarm2power_test = {}
     for _, row in df.iterrows():
-        i = row['periodId']
-        j = row['farmId']
-        periodfarm2power_test[(i, j)] = row['power_z']
+        i = row['periodId']  # periodId
+        j = row['farmId']  # farmId
+        periodfarm2power_test[(i, j)] = row['power_z']  # Update dictionary
     return periodfarm2power_test
 
 # lags creation
