@@ -4,6 +4,10 @@
 
 <img src="img/colab_data_imputation.png" alt="Image Alt Text" width="700"/>
 
+### Reconstruction of wind power data
+
+In power system operations and electricity markets, missing data is a common problem in practice. This issue is especially significant when large-scale data-driven methods are used for point or probabilistic wind power forecasting. Data imputation methods, such as k-nearest neighbors and factor models, are crucial for filling in missing values before training forecasting models. These techniques ensure data completeness, which is essential for the accuracy of data-driven forecasting approaches.
+
 ### Running the MLflow Experiment Script with Poetry
 
 1. **Install Poetry**
