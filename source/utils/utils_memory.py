@@ -47,35 +47,40 @@ def update_period2farm_and_farm2period_test(df):
         periodfarm2power_test[(i, j)] = row['power_z']  # Update dictionary
     return periodfarm2power_test
 
-# lags creation
-
 def backwards(df, list_cols, list_lags, nr_lags):
-    try:
-        df_lags = df.copy()
-        # Backwards lag features
-        for col in list_cols:
-            for lag in list_lags:
-                df_lags[f'{col}_lag_-{lag}'] = df[col].shift(lag)
-        # Remove rows with NaN values introduced by shifting
-        df = df.iloc[nr_lags:, :]
-        return df_lags
-    except Exception as e:
-        print(f"Error occurred in backwards function: {str(e)}")
-        return None
+    " Create lag features by shifting columns backwards. "
+
+    assert isinstance(df, pd.DataFrame), "Input df must be a pandas DataFrame."
+    assert isinstance(list_cols, list), "Input list_cols must be a list."
+    assert isinstance(list_lags, list), "Input list_lags must be a list."
+    assert isinstance(nr_lags, int), "Input nr_lags must be an integer."
+
+    df_lags = df.copy()
+    # Backwards lag features
+    for col in list_cols:
+        for lag in list_lags:
+            df_lags[f'{col}_lag_-{lag}'] = df[col].shift(lag)
+    # Remove rows with NaN values introduced by shifting
+    df = df.iloc[nr_lags:, :]
+    return df_lags
 
 def forwards(df, list_cols, list_lags, nr_lags):
-    try:
-        df_lags = df.copy()
-        # Forwards lag features
-        for col in list_cols:
-            for lag in list_lags:
-                df_lags[f'{col}_lag_+{lag}'] = df[col].shift(-lag)
-        # Remove rows with NaN values introduced by shifting
-        df = df.iloc[:-nr_lags, :]
-        return df_lags
-    except Exception as e:
-        print(f"Error occurred in backwards function: {str(e)}")
-        return None
+    " Create lag features by shifting columns forwards. "
+
+    assert isinstance(df, pd.DataFrame), "Input df must be a pandas DataFrame."
+    assert isinstance(list_cols, list), "Input list_cols must be a list."
+    assert isinstance(list_lags, list), "Input list_lags must be a list."
+    assert isinstance(nr_lags, int), "Input nr_lags must be an integer."
+
+    df_lags = df.copy()
+    # Forwards lag features
+    for col in list_cols:
+        for lag in list_lags:
+            df_lags[f'{col}_lag_+{lag}'] = df[col].shift(-lag)
+    # Remove rows with NaN values introduced by shifting
+    df = df.iloc[:-nr_lags, :]
+    return df_lags
+
 
 def create_lag_features(df, nr_lags, lookup='both'):
     
