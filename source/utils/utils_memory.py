@@ -14,16 +14,19 @@ def update_period2farm_and_farm2period_train(df):
     farm2period = {}
     periodfarm2power_train = {}
     for _, row in df.iterrows():
+        # Update period2farm dictionary
         i = row['periodId']
         j = row['farmId']
         if i not in period2farm:
-            period2farm[i] = [j]
+            period2farm[i] = [j]  # Initialize list with farmId
         else:
-            period2farm[i].append(j)
+            period2farm[i].append(j)  # Append farmId to list
+        # Update farm2period dictionary
         if j not in farm2period:
-            farm2period[j] = [i]
+            farm2period[j] = [i]  # Initialize list with periodId
         else:
-            farm2period[j].append(i)
+            farm2period[j].append(i)  # Append periodId to list
+        # Update periodfarm2power_train dictionary
         periodfarm2power_train[(i,j)] = row.power_z
     return period2farm, farm2period, periodfarm2power_train
 
