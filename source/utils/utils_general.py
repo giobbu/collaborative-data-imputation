@@ -17,6 +17,7 @@ def read_nordpool_csv(file_path):
     """
     Preprocesses a CSV file containing Date and Hours columns.
     """
+    assert file_path.endswith('.csv'), "Input file must be a CSV file."
     # Read CSV file
     df = pd.read_csv(file_path)
     # Convert Date column to datetime.date object
