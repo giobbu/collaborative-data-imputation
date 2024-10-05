@@ -83,16 +83,22 @@ def forwards(df, list_cols, list_lags, nr_lags):
 
 
 def create_lag_features(df, nr_lags, lookup='both'):
+    " Create lag features for a DataFrame. "
     
+    assert isinstance(df, pd.DataFrame), "Input df must be a pandas DataFrame."
+    assert isinstance(nr_lags, int), "Input nr_lags must be an integer."
+    assert lookup in ['both', 'backwards', 'forwards'], "Input lookup must be 'both', 'backwards', or 'forwards'."
+    
+    # List of columns and lags
     list_cols = list(df.columns)
     list_lags = list(np.arange(nr_lags) + 1)
-    
+    # Lookup dictionary
     lookup_functions = {
         'both': [backwards, forwards],
         'backwards': [backwards],
         'forwards': [forwards]
     }
-    
+    # Apply lookup functions
     if lookup in lookup_functions:
         for func in lookup_functions[lookup]:
             df = func(df, list_cols, list_lags, nr_lags)
