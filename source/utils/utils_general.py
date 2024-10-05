@@ -4,6 +4,7 @@ def read_excel_file(file_path):
     """
     Reads an Excel file and skips the first two rows.
     """
+    assert file_path.endswith('.xlsx'), "Input file must be an Excel file."
     # Read the Excel file and skip rows 1 and 2
     df = pd.read_excel(file_path, skiprows=[1, 2])
     # Rename columns and set 'datetimeId' as the index
