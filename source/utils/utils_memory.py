@@ -4,19 +4,12 @@ import numpy as np
 def update_period2farm_and_farm2period_train(df):
     """
     Update dictionaries to map periods to farms and farms to periods for training data.
-
-    Args:
-    - df (pandas.DataFrame): DataFrame containing training data with columns 'periodId', 'farmId', and 'power_z'.
-
-    Returns:
-    - period2farm (dict): Dictionary mapping period IDs to lists of corresponding farm IDs.
-    - farm2period (dict): Dictionary mapping farm IDs to lists of corresponding period IDs.
-    - periodfarm2power_train (dict): Dictionary mapping (periodId, farmId) tuples to power_z values.
     """
-    if not isinstance(df, pd.DataFrame):
-        raise TypeError("Input df must be a pandas DataFrame.")
-    if 'periodId' not in df.columns or 'farmId' not in df.columns or 'power_z' not in df.columns:
-        raise ValueError("DataFrame df must contain columns 'periodId', 'farmId', and 'power_z'.")
+
+    assert isinstance(df, pd.DataFrame), "Input df must be a pandas DataFrame."
+    assert 'periodId' in df.columns and 'farmId' in df.columns and 'power_z' in df.columns, "DataFrame df must contain columns 'periodId', 'farmId', and 'power_z'."
+
+    # Initialize dictionaries
     period2farm = {}
     farm2period = {}
     periodfarm2power_train = {}
