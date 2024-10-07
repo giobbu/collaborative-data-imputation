@@ -216,19 +216,23 @@ def create_insample_df(train_periods, train_farms, train_targets, train_predicti
 
 
 def create_outsample_df(test_periods, test_farms, test_targets, test_predictions, lst_farms):
-    try:
-        # Create DataFrame from input lists
-        df_outsample = pd.DataFrame({
-            'periodId': test_periods,
-            'farmId': test_farms,
-            'targets': test_targets,
-            'predictions': test_predictions
-        })
-        # Set periodId as index
-        df_outsample = df_outsample.set_index('periodId')
-        # Filter DataFrame by selected farm IDs
-        df_outsample = df_outsample[df_outsample['farmId'].isin(lst_farms)]
-        return df_outsample
-    except Exception as e:
-        print(f"An error occurred during out-of-sample data preprocessing: {e}")
-        return None
+    " Create DataFrame for outsample data. "
+
+    assert isinstance(test_periods, list), "test_periods must be a list."
+    assert isinstance(test_farms, list), "test_farms must be a list."
+    assert isinstance(test_targets, list), "test_targets must be a list."
+    assert isinstance(test_predictions, list), "test_predictions must be a list."
+    assert isinstance(lst_farms, list), "lst_farms must be a list."
+    
+    # Create DataFrame from input lists
+    df_outsample = pd.DataFrame({
+        'periodId': test_periods,
+        'farmId': test_farms,
+        'targets': test_targets,
+        'predictions': test_predictions
+    })
+    # Set periodId as index
+    df_outsample = df_outsample.set_index('periodId')
+    # Filter DataFrame by selected farm IDs
+    df_outsample = df_outsample[df_outsample['farmId'].isin(lst_farms)]
+    return df_outsample
