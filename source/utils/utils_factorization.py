@@ -1,22 +1,21 @@
 import pickle
-import pandas as pd 
+import pandas as pd
+from loguru import logger
 
 def save_results_to_file(train_df, valid_df, id2datetime_mapping, id2farm_mapping, max_mapping_train, min_mapping_train, file_path):
-    try:
-        results = {
-            'train': train_df,
-            'val': valid_df,
-            'id2datetime_mapping': id2datetime_mapping,
-            'id2farm_mapping': id2farm_mapping,
-            'max_mapping_train' : max_mapping_train,
-            'min_mapping_train' : min_mapping_train
-        }
-        # Save results to a file using pickle.dump()
-        with open(file_path, 'wb') as file: 
-            pickle.dump(results, file)
-        print(f"Results saved to {file_path} successfully.")
-    except Exception as e:
-        print(f"Error occurred while saving results: {e}")
+    results = {
+        'train': train_df,
+        'val': valid_df,
+        'id2datetime_mapping': id2datetime_mapping,
+        'id2farm_mapping': id2farm_mapping,
+        'max_mapping_train' : max_mapping_train,
+        'min_mapping_train' : min_mapping_train
+    }
+    # Save results to a file using pickle.dump()
+    with open(file_path, 'wb') as file: 
+        pickle.dump(results, file)
+    logger.info(f"Results saved to {file_path} successfully.")
+
 
 
 def _load_results(path_list):
