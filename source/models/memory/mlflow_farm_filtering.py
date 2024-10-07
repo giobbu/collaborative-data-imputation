@@ -5,15 +5,16 @@ from loguru import logger
 
 class FarmCollaborativeFiltering(PythonModel):
     " Collaborative Filtering model based on wind farms similarity. "
-
+    
     def __init__(self, farm2period, periodfarm2power, lst_farms, K, min_common_periods):
-
+        " Initialize the FarmCollaborativeFiltering instance. "
+        # Check if the inputs are of the correct type
         assert isinstance(farm2period, dict), "Input farm2period must be a dictionary."
         assert isinstance(periodfarm2power, dict), "Input periodfarm2power must be a dictionary."
         assert isinstance(lst_farms, list), "Input lst_farms must be a list."
         assert isinstance(K, int), "Input K must be an integer."
         assert isinstance(min_common_periods, int), "Input min_common_periods must be an integer."
-
+        # Store the inputs
         self.farm2period = farm2period
         self.periodfarm2power = periodfarm2power
         self.lst_farms = lst_farms
@@ -27,9 +28,12 @@ class FarmCollaborativeFiltering(PythonModel):
     def calculate_avg_and_deviation(self, farm, periods):
         " Calculate the average, deviation, and sigma of power for a given farm. "
         powers = {period: self.periodfarm2power[(period, farm)] for period in periods}
+        # Compute the average power
         avg_power = np.mean(list(powers.values()))
+        # Compute the deviation of power
         dev_power = {period: (power - avg_power) for period, power in powers.items()}
         dev_power_values = np.array(list(dev_power.values()))
+        # Compute the sigma of power
         sigma_power = np.sqrt(dev_power_values.dot(dev_power_values))
         return avg_power, dev_power, sigma_power
 
@@ -68,9 +72,10 @@ class FarmCollaborativeFiltering(PythonModel):
                             del sl[-1]
             # Store the K most similar wind farms
             self.neighbors[farm_i] = sl
+            # Log the progress
             if count % 5 == 0:
                 logger.info('Wind Farms Processed: ' + str(count))
-            count+=1
+            count += 1  # Increment the count
         return self.neighbors, self.averages, self.deviations, self.sigmas
 
     def compute_predictions(self, farm_i, period_m):
