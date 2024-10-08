@@ -14,6 +14,9 @@ class FarmCollaborativeFiltering(PythonModel):
         assert isinstance(lst_farms, list), "Input lst_farms must be a list."
         assert isinstance(K, int), "Input K must be an integer."
         assert isinstance(min_common_periods, int), "Input min_common_periods must be an integer."
+        assert K > 0, 'K must be a positive integer'
+        assert min_common_periods > 0, 'min_common_farms must be a positive integer'
+
         # Store the inputs
         self.farm2period = farm2period
         self.periodfarm2power = periodfarm2power
