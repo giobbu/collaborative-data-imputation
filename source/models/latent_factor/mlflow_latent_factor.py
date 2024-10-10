@@ -120,7 +120,6 @@ class LatentFactorModel(PythonModel):
                                                     lambda_reg_U=lambda_reg_U, lambda_reg_P=lambda_reg_P)
         return U, P
 
-
     def predict(self, U, P, df):
         """
         Make predictions using matrices U and P.
@@ -131,7 +130,8 @@ class LatentFactorModel(PythonModel):
             predictions[i] = np.dot(U[u], P[p])  # Compute prediction
         return predictions
     
-    def compute_rmse(self, targets, predictions):
+    @staticmethod
+    def compute_rmse(targets, predictions):
         """
         Compute the Root Mean Squared Error (RMSE) between targets and predictions.
         """
