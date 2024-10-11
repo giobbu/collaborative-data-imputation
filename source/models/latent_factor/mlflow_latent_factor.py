@@ -1,4 +1,5 @@
 import numpy as np
+import pandas as pd
 from loguru import logger
 from mlflow.pyfunc import PythonModel
 
@@ -57,6 +58,14 @@ class LatentFactorModel(PythonModel):
         """
         Perform Alternating Least Squares (ALS) optimization.
         """
+
+        assert isinstance(P, np.ndarray), "Input P must be a numpy array."
+        assert isinstance(n_epochs, int), "Input n_epochs must be an integer."
+        assert isinstance(train_df, pd.DataFrame), "Input train_df must be a pandas DataFrame."
+        assert isinstance(valid_df, pd.DataFrame), "Input valid_df must be a pandas DataFrame."
+        assert isinstance(lambda_reg_U, float), "Input lambda_reg_U must be a float."
+        assert isinstance(lambda_reg_P, float), "Input lambda_reg_P must be a float."
+
         train_errors, valid_errors = [], []
         for epoch in range(n_epochs):
             # Update U and P
@@ -81,6 +90,15 @@ class LatentFactorModel(PythonModel):
         """
         Perform Stochastic Gradient Descent (SGD) optimization.
         """
+
+        assert isinstance(P, np.ndarray), "Input P must be a numpy array."
+        assert isinstance(U, np.ndarray), "Input U must be a numpy array."
+        assert isinstance(n_epochs, int), "Input n_epochs must be an integer."
+        assert isinstance(train_df, pd.DataFrame), "Input train_df must be a pandas DataFrame."
+        assert isinstance(valid_df, pd.DataFrame), "Input valid_df must be a pandas DataFrame."
+        assert isinstance(lambda_reg_U, float), "Input lambda_reg_U must be a float."
+        assert isinstance(lambda_reg_P, float), "Input lambda_reg_P must be a float."
+        
         train_errors, valid_errors = [], []
         for epoch in range(n_epochs):
             for row in train_df.itertuples():
