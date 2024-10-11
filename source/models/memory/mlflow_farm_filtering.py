@@ -113,6 +113,7 @@ class FarmCollaborativeFiltering(PythonModel):
 
     def predict(self, power_dict):
         " Predict using the model. "
+        assert isinstance(power_dict, dict), "Input power_dict must be a dictionary."
         predictions = []
         targets = []
         periods = []
@@ -129,6 +130,9 @@ class FarmCollaborativeFiltering(PythonModel):
     @staticmethod
     def compute_rmse(predictions, targets):
         " Compute the root mean squared error. "
+        assert isinstance(predictions, list), "Input predictions must be a list."
+        assert isinstance(targets, list), "Input targets must be a list."
+        assert len(predictions) == len(targets), "Length of predictions and targets must be the same."
         predictions = np.array(predictions)
         targets = np.array(targets)
         rmse = np.sqrt(np.mean((predictions - targets)**2))
