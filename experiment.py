@@ -3,7 +3,8 @@ from loguru import logger
 from copy import deepcopy
 from config import params
 from source.utils.utils_general import read_nordpool_csv
-from source.process.process_general import melt_dataframe, split_train_test, Normalizer, preprocess_ids, filter_data_by_common_periods_farms
+from source.process.process_general import Normalizer
+from source.process.process_general import melt_dataframe, split_train_test,  preprocess_ids, filter_data_by_common_periods_farms
 from experiments.experiment_latent_factor import run_latent_factor_experiment
 from experiments.experiment_group_average import run_grouped_avg_experiment
 from experiments.experiment_period_filtering import run_period_collaborative_experiment
