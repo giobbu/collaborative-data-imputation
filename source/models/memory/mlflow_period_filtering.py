@@ -41,6 +41,12 @@ class PeriodCollaborativeFiltering(PythonModel):
         dev_power_values = np.array(list(dev_power.values()))  # deviation values
         sigma_power = np.sqrt(dev_power_values.dot(dev_power_values))  # standard deviation
         return avg_power, dev_power, sigma_power
+    
+    def pearson_similarity(self, common_periods, dev_power_i, sigma_power_i,  dev_power_j, sigma_power_j):
+        " Compute Pearson similarity between two wind farms. "
+        covariance = sum(dev_power_i[period] * dev_power_j[period] for period in common_periods)
+        weigth_ij = covariance / (sigma_power_i * sigma_power_j)
+        return weigth_ij
 
     def compute_period_similarities(self):
         """
@@ -64,8 +70,8 @@ class PeriodCollaborativeFiltering(PythonModel):
                     common_farms = farms_i_set & farms_j_set  # Get the common farms
                     if len(common_farms) >= self.min_common_farms:  # Check if the number of common farms is greater than min_common_farms
                         _, dev_power_j, sigma_power_j = self.calculate_avg_and_deviation(period_j, farms_j)
-                        numerator = sum(dev_power_i[farm] * dev_power_j[farm] for farm in common_farms)  # Compute the numerator
-                        w_ij = numerator / (sigma_power_i * sigma_power_j)  # Compute the similarity
+                        # Compute the Pearson similarity between period_i and period_j
+                        w_ij = self.pearson_similarity(common_farms, dev_power_i, sigma_power_i,  dev_power_j, sigma_power_j)
                         sl.add((-w_ij, period_j))  # Add the similarity to the SortedList
                         if len(sl) > self.K:  # Keep only the K most similar periods
                             del sl[-1]  # Delete the last element

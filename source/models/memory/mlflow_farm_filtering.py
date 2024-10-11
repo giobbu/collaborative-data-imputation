@@ -39,6 +39,12 @@ class FarmCollaborativeFiltering(PythonModel):
         # Compute the sigma of power
         sigma_power = np.sqrt(dev_power_values.dot(dev_power_values))
         return avg_power, dev_power, sigma_power
+    
+    def pearson_similarity(self, common_periods, dev_power_i, sigma_power_i,  dev_power_j, sigma_power_j):
+        " Compute Pearson similarity between two wind farms. "
+        covariance = sum(dev_power_i[period] * dev_power_j[period] for period in common_periods)
+        weigth_ij = covariance / (sigma_power_i * sigma_power_j)
+        return weigth_ij
 
     def compute_similarities(self):
         " Compute the similarities between wind farms. "
@@ -66,8 +72,7 @@ class FarmCollaborativeFiltering(PythonModel):
                     if len(common_periods) >= self.min_common_periods:  # Check if the number of common periods is greater than min_common_periods
                         _, dev_power_j, sigma_power_j = self.calculate_avg_and_deviation(farm_j, periods_j)
                         # Compute the similarity between farm_i and farm_j
-                        numerator = sum(dev_power_i[period] * dev_power_j[period] for period in common_periods)
-                        w_ij = numerator / (sigma_power_i * sigma_power_j)
+                        w_ij = self.pearson_similarity(common_periods, dev_power_i, sigma_power_i,  dev_power_j, sigma_power_j)
                         # Add the similarity to the SortedList
                         sl.add((-w_ij, farm_j))
                         # Keep only the K most similar wind farms
