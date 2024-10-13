@@ -2,8 +2,9 @@ repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.4.0  # Use the latest version available
     hooks:
-      - id: trailing-whitespace
-      - id: end-of-file-fixer
+      - id: trailing-whitespace  # Removes trailing whitespace
+      - id: end-of-file-fixer  # Makes sure files end in a newline and only a newline
+      - id: check-added-large-files  # Prevents large files from being committed
 
   - repo: local
     hooks:
