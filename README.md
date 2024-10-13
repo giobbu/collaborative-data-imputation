@@ -16,7 +16,7 @@ In power system operations and electricity markets, missing data is a common pro
     pip install poetry
     ```
 
-2. **Install Project Dependencies** 
+2. **Install Project Dependencies**
 
     Install the project dependencies, including MLflow, by running the following command in your project directory:
 
@@ -24,7 +24,7 @@ In power system operations and electricity markets, missing data is a common pro
     poetry install
     ```
 
-3. **Running the Experiments** 
+3. **Running the Experiments**
 
     To run the `experiment.py` script within the Poetry environment, use the following command:
 
@@ -32,7 +32,7 @@ In power system operations and electricity markets, missing data is a common pro
     poetry run python experiment.py
     ```
 
-4. **Viewing MLflow Tracking**: 
+4. **Viewing MLflow Tracking**:
 
     ```bash
     mlflow ui

@@ -8,7 +8,7 @@ from source.process.process_general import melt_dataframe, split_train_test,  pr
 from experiments.experiment_latent_factor import run_latent_factor_experiment
 from experiments.experiment_group_average import run_grouped_avg_experiment
 from experiments.experiment_period_filtering import run_period_collaborative_experiment
-from experiments.experiment_farm_filtering import run_farm_collaborative_experiment 
+from experiments.experiment_farm_filtering import run_farm_collaborative_experiment
 from experiments.experiment_lag_farm_filtering import run_lag_farm_collaborative_experiment
 
 if __name__ == "__main__":
@@ -26,11 +26,11 @@ if __name__ == "__main__":
 
     # read nord pool csv file
     df = read_nordpool_csv(params['nord_pool'])
-    logger.success("Data loaded.") 
+    logger.success("Data loaded.")
 
     #  melt dataframe for matrix factorization and retain non-missing values
     df_melt_without_nan, _ = melt_dataframe(df, id_vars_='periodId', var_name_='farmId', value_name_='power')
-    logger.success("Melt Dataframe created.") 
+    logger.success("Melt Dataframe created.")
 
     # split to training and validation sets
     training_df_datetime, validation_df_datetime = split_train_test(df_melt_without_nan,
@@ -38,18 +38,18 @@ if __name__ == "__main__":
                                                                     block = params['block'],
                                                                     blocksize = params['blocksize'],
                                                                     seed = params['seed'])
-    logger.success("Train/Test data splitted.") 
+    logger.success("Train/Test data splitted.")
 
     # match training/validation periods, farms
     filtered_training_df, filtered_validation_df = filter_data_by_common_periods_farms(training_df_datetime, validation_df_datetime)
-    logger.success("Train/Test data keys matched.") 
+    logger.success("Train/Test data keys matched.")
 
     # normalize data
     normalizer = Normalizer()
     norm_training_df_datetime,  norm_validation_df_datetime, _, _ = normalizer.normalize_power(filtered_training_df, filtered_validation_df, id_col='farmId', power_col='power')
-    logger.success("Data normalized by max.") 
+    logger.success("Data normalized by max.")
 
-    # copy datasets for grouped avg model 
+    # copy datasets for grouped avg model
     training_df = deepcopy(norm_training_df_datetime)
     validation_df = deepcopy(norm_validation_df_datetime)
 
@@ -91,7 +91,3 @@ if __name__ == "__main__":
         logger.success("Experiment successfully concluded.")
     else:
         logger.error('--------------------  NO MODEL SET ! -------------------- ')
-
-
-
-

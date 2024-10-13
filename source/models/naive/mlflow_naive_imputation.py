@@ -9,11 +9,11 @@ class SimpleAvgImputation(PythonModel):
 
         assert isinstance(variable_name, str), "Input variable_name must be a string."
         assert isinstance(group_by, str), "Input group_by must be a string."
-        
+
         self.variable_name = variable_name
         self.group_by = group_by
         self.avg_mean = None
-    
+
     def fit(self, training_df):
         " Fit the model. "
         self.avg_mean = training_df.groupby(self.group_by)[self.variable_name].mean()
@@ -28,4 +28,3 @@ class SimpleAvgImputation(PythonModel):
         " Compute the root mean squared error. "
         rmse = np.sqrt(np.sum((predictions - targets) ** 2) / len(predictions))
         return rmse
-

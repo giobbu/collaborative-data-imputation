@@ -41,7 +41,7 @@ class PeriodCollaborativeFiltering(PythonModel):
         dev_power_values = np.array(list(dev_power.values()))  # deviation values
         sigma_power = np.sqrt(dev_power_values.dot(dev_power_values))  # standard deviation
         return avg_power, dev_power, sigma_power
-    
+
     def pearson_similarity(self, common_periods, dev_power_i, sigma_power_i,  dev_power_j, sigma_power_j):
         " Compute Pearson similarity between two wind farms. "
         covariance = sum(dev_power_i[period] * dev_power_j[period] for period in common_periods)
@@ -121,7 +121,7 @@ class PeriodCollaborativeFiltering(PythonModel):
                 farms.append(farm_m)
             return predictions, targets, periods, farms
 
-            
+
     @staticmethod
     def compute_rmse(predictions, targets):
         " Compute the root mean squared error (RMSE) between predictions and targets. "
@@ -132,4 +132,3 @@ class PeriodCollaborativeFiltering(PythonModel):
         targets = np.array(targets)
         rmse = np.sqrt(np.mean((predictions - targets)**2))
         return rmse
-

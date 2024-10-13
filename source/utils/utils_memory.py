@@ -35,7 +35,7 @@ def update_period2farm_and_farm2period_test(df):
     """
     Update dictionary to map periodfarm to power_z values for test data.
     """
-    
+
     assert isinstance(df, pd.DataFrame), "Input df must be a pandas DataFrame."
     assert 'periodId' in df.columns and 'farmId' in df.columns and 'power_z' in df.columns, "DataFrame df must contain columns 'periodId', 'farmId', and 'power_z'."
 
@@ -84,11 +84,11 @@ def forwards(df, list_cols, list_lags, nr_lags):
 
 def create_lag_features(df, nr_lags, lookup='both'):
     " Create lag features for a DataFrame. "
-    
+
     assert isinstance(df, pd.DataFrame), "Input df must be a pandas DataFrame."
     assert isinstance(nr_lags, int), "Input nr_lags must be an integer."
     assert lookup in ['both', 'backwards', 'forwards'], "Input lookup must be 'both', 'backwards', or 'forwards'."
-    
+
     # List of columns and lags
     list_cols = list(df.columns)
     list_lags = list(np.arange(nr_lags) + 1)
@@ -108,5 +108,5 @@ def create_lag_features(df, nr_lags, lookup='both'):
     # Separate lag features and non-lag features
     list_cols_lags = [name for name in list(df.columns) if 'lag' in str(name)]
     list_cols_farm = [name for name in list(df.columns) if 'lag' not in str(name)]
-    
+
     return df, list_cols_farm, list_cols_lags

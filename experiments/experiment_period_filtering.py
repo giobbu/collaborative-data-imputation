@@ -11,7 +11,7 @@ def run_period_collaborative_experiment(training_df, validation_df, **params):
 
     lst_periods = list(period2farm.keys())
 
-    period_collaborative_filtering = PeriodCollaborativeFiltering(period2farm, periodfarm2power_train, lst_periods, K=params['neighbors'], min_common_farms=params['min_common_farms'])   
+    period_collaborative_filtering = PeriodCollaborativeFiltering(period2farm, periodfarm2power_train, lst_periods, K=params['neighbors'], min_common_farms=params['min_common_farms'])
 
     with mlflow.start_run(run_name=params['based_on']):
 
@@ -27,7 +27,7 @@ def run_period_collaborative_experiment(training_df, validation_df, **params):
         # Log params and results
         mlflow.log_params(params)
         mlflow.log_metric("eval_rmse", eval_rmse)
-        
+
         # Save model
         mlflow.pyfunc.log_model(artifact_path = params['model'],
                                 python_model = period_collaborative_filtering,

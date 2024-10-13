@@ -5,7 +5,7 @@ from loguru import logger
 
 class FarmCollaborativeFiltering(PythonModel):
     " Collaborative Filtering model based on wind farms similarity. "
-    
+
     def __init__(self, farm2period, periodfarm2power, lst_farms, K, min_common_periods):
         " Initialize the FarmCollaborativeFiltering instance. "
         # Check if the inputs are of the correct type
@@ -39,7 +39,7 @@ class FarmCollaborativeFiltering(PythonModel):
         # Compute the sigma of power
         sigma_power = np.sqrt(dev_power_values.dot(dev_power_values))
         return avg_power, dev_power, sigma_power
-    
+
     def pearson_similarity(self, common_periods, dev_power_i, sigma_power_i,  dev_power_j, sigma_power_j):
         " Compute Pearson similarity between two wind farms. "
         covariance = sum(dev_power_i[period] * dev_power_j[period] for period in common_periods)
@@ -48,7 +48,7 @@ class FarmCollaborativeFiltering(PythonModel):
 
     def compute_similarities(self):
         " Compute the similarities between wind farms. "
-        logger.info('Start Data Imputation based on Wind Farms Similarity') 
+        logger.info('Start Data Imputation based on Wind Farms Similarity')
         logger.info('List of Wind Farms ' + str(self.lst_farms))
         # Iterate over the wind farms
         count=0
@@ -137,4 +137,3 @@ class FarmCollaborativeFiltering(PythonModel):
         targets = np.array(targets)
         rmse = np.sqrt(np.mean((predictions - targets)**2))
         return rmse
-

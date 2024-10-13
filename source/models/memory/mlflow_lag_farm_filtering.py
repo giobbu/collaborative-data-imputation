@@ -6,7 +6,7 @@ from loguru import logger
 
 class LagFarmDataImputation(PythonModel):
     " Define a class for Lag-Farm Data Imputation. "
-    
+
     def __init__(self, farm2period, periodfarm2power, lst_farms, lst_farms_lags, K, min_common_periods, other_farms=True):
         " Initialize the LagFarmDataImputation object. "
 
@@ -54,7 +54,7 @@ class LagFarmDataImputation(PythonModel):
     def compute_similarities(self):
         " Compute the similarities between wind farms (lagged and non-lagged). "
         count=0
-        logger.info('Start Data Imputation based on Wind Farms Similarity') 
+        logger.info('Start Data Imputation based on Wind Farms Similarity')
         logger.info('List of Wind Farms ' + str(self.lst_farms))
         # Iterate over the wind farms
         for farm_i in self.lst_farms:

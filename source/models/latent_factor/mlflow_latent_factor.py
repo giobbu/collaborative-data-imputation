@@ -98,14 +98,14 @@ class LatentFactorModel(PythonModel):
         assert isinstance(valid_df, pd.DataFrame), "Input valid_df must be a pandas DataFrame."
         assert isinstance(lambda_reg_U, float), "Input lambda_reg_U must be a float."
         assert isinstance(lambda_reg_P, float), "Input lambda_reg_P must be a float."
-        
+
         train_errors, valid_errors = [], []
         for epoch in range(n_epochs):
             for row in train_df.itertuples():
                 # Update U and P for each row
                 u, p, target = row.__getattribute__(self.var_U), row.__getattribute__(self.var_P), row.__getattribute__(self.var_name)  # Get row values
                 error = target - np.dot(U[u], P[p])  # Compute error
-                U[u] += self.learning_rate * (error * P[p] - lambda_reg_U * U[u])  # Update U 
+                U[u] += self.learning_rate * (error * P[p] - lambda_reg_U * U[u])  # Update U
                 P[p] += self.learning_rate * (error * U[u] - lambda_reg_P * P[p])  # Update P
             train_preds = self.predict(U, P, train_df)  # Compute training predictions
             train_error = self.compute_rmse(train_df[self.var_name].values, train_preds)  # Compute training error
@@ -123,18 +123,18 @@ class LatentFactorModel(PythonModel):
     def factorization(self, train_df, valid_df, solver='als', n_epochs=5, lambda_reg_P=50, lambda_reg_U=50):
         """
         Perform matrix factorization using ALS or SGD.
-        """ 
+        """
         n_p = len(train_df[self.var_P].unique())  # Number of unique values for variable P
         n_u = len(train_df[self.var_U].unique())  # Number of unique values for variable U
         P = self.initialize_matrix(n_p, self.k, self.warm_start)  # Initialize matrix P
         U = self.initialize_matrix(n_u, self.k, self.warm_start)  # Initialize matrix U
         if solver == 'als':
-            U, P = self._alternating_least_squares(P=P, n_epochs = n_epochs, 
-                                                    train_df=train_df, valid_df=valid_df, 
+            U, P = self._alternating_least_squares(P=P, n_epochs = n_epochs,
+                                                    train_df=train_df, valid_df=valid_df,
                                                     lambda_reg_U =lambda_reg_U, lambda_reg_P=lambda_reg_P)
         elif solver == 'sgd':
-            U, P = self._stochastic_gradient_descent(P=P, U=U, n_epochs=n_epochs, 
-                                                    train_df=train_df, valid_df=valid_df, 
+            U, P = self._stochastic_gradient_descent(P=P, U=U, n_epochs=n_epochs,
+                                                    train_df=train_df, valid_df=valid_df,
                                                     lambda_reg_U=lambda_reg_U, lambda_reg_P=lambda_reg_P)
         return U, P
 
@@ -147,7 +147,7 @@ class LatentFactorModel(PythonModel):
             u, p = row.__getattribute__(self.var_U), row.__getattribute__(self.var_P)  # Get row values
             predictions[i] = np.dot(U[u], P[p])  # Compute prediction
         return predictions
-    
+
     @staticmethod
     def compute_rmse(targets, predictions):
         """
@@ -155,5 +155,3 @@ class LatentFactorModel(PythonModel):
         """
         rmse = np.sqrt(np.mean((predictions - targets) ** 2))
         return rmse
-
-

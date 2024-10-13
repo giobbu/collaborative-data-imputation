@@ -12,11 +12,11 @@ def run_latent_factor_experiment(training_df, validation_df, **params):
     with mlflow.start_run(run_name=params['solver']):
 
         # Train Model
-        U , P = lf_model.factorization(train_df=training_df, 
-                                        valid_df=validation_df, 
-                                        solver=params['solver'], 
-                                        n_epochs=params['n_epochs'], 
-                                        lambda_reg_P=params['lambda_reg_P'], 
+        U , P = lf_model.factorization(train_df=training_df,
+                                        valid_df=validation_df,
+                                        solver=params['solver'],
+                                        n_epochs=params['n_epochs'],
+                                        lambda_reg_P=params['lambda_reg_P'],
                                         lambda_reg_U=params['lambda_reg_U'])
 
         # Evaluate the model
@@ -29,7 +29,7 @@ def run_latent_factor_experiment(training_df, validation_df, **params):
         # Log params and results
         mlflow.log_params(params)
         mlflow.log_metric("eval_rmse", eval_rmse)
-        
+
         # Save model
         mlflow.pyfunc.log_model(artifact_path = params['model'],
                                 python_model = lf_model,

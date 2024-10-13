@@ -1,4 +1,4 @@
-import pandas as pd 
+import pandas as pd
 
 def read_excel_file(file_path):
     """
@@ -30,5 +30,3 @@ def read_nordpool_csv(file_path):
     df.set_index('periodId', inplace=True)
     df.drop(['Date', 'Hours'], axis=1, inplace=True)
     return df
-
-

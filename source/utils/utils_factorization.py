@@ -24,7 +24,7 @@ def save_results_to_file(train_df, valid_df, id2datetime_mapping, id2farm_mappin
         'min_mapping_train' : min_mapping_train
     }
     # Save results to a file using pickle.dump()
-    with open(file_path, 'wb') as file: 
+    with open(file_path, 'wb') as file:
         pickle.dump(results, file)
     logger.info(f"Results saved to {file_path} successfully.")
 
