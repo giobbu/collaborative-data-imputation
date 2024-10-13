@@ -47,3 +47,14 @@ def test_update_period2farm_and_farm2period_train_missing_columns(sample_df_miss
     with pytest.raises(AssertionError, match="DataFrame df must contain columns 'periodId', 'farmId', and 'power_z'."):
         update_period2farm_and_farm2period_train(sample_df_missing_columns)
 
+# Test case: DataFrame with no rows
+def test_update_period2farm_and_farm2period_train_empty_df():
+    " Test if the dictionaries are empty for an empty DataFrame."
+    # Create an empty DataFrame with the correct columns
+    df_empty = pd.DataFrame(columns=['periodId', 'farmId', 'power_z'])
+    # Call the function with the empty DataFrame
+    period2farm, farm2period, periodfarm2power_train = update_period2farm_and_farm2period_train(df_empty)
+    # Check that the dictionaries are empty
+    assert period2farm == {}, "period2farm should be empty for empty DataFrame."
+    assert farm2period == {}, "farm2period should be empty for empty DataFrame."
+    assert periodfarm2power_train == {}, "periodfarm2power_train should be empty for empty DataFrame."
