@@ -39,3 +39,9 @@ def test_update_period2farm_and_farm2period_train_invalid_input():
         update_period2farm_and_farm2period_train([1, 2, 3])
 
 
+# Test case: missing columns in DataFrame
+def test_update_period2farm_and_farm2period_train_missing_columns(sample_df_missing_columns):
+    # Call the function with a DataFrame missing required columns
+    with pytest.raises(AssertionError, match="DataFrame df must contain columns 'periodId', 'farmId', and 'power_z'."):
+        update_period2farm_and_farm2period_train(sample_df_missing_columns)
+
