@@ -39,7 +39,6 @@ def test_update_period2farm_and_farm2period_train_invalid_input():
     with pytest.raises(AssertionError, match="Input df must be a pandas DataFrame."):
         update_period2farm_and_farm2period_train([1, 2, 3])
 
-
 # Test case: missing columns in DataFrame
 def test_update_period2farm_and_farm2period_train_missing_columns(sample_df_missing_columns):
     " Test if an assertion error is raised for a DataFrame missing required columns. "
