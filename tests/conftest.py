@@ -21,3 +21,12 @@ def sample_df_missing_columns():
             'power_z': [0.5, 1.2, 0.7]
             }
     return pd.DataFrame(data)
+
+# Fixture to provide a sample DataFrame with backwards lag features
+@pytest.fixture
+def sample_df_back_lags():
+    df = pd.DataFrame({
+        'A': range(30, 40),
+        'B': range(10, 20)
+    })
+    return df
