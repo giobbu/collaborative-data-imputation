@@ -61,7 +61,7 @@ def backwards(df, list_cols, list_lags, nr_lags):
         for lag in list_lags:
             df_lags[f'{col}_lag_-{lag}'] = df[col].shift(lag)
     # Remove rows with NaN values introduced by shifting
-    df = df.iloc[nr_lags:, :]
+    df_lags = df_lags.iloc[nr_lags:, :]
     return df_lags
 
 def forwards(df, list_cols, list_lags, nr_lags):
