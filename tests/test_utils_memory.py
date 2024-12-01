@@ -2,8 +2,6 @@ import pytest
 import pandas as pd
 from source.utils.utils_memory import update_period2farm_and_farm2period_train, update_period2farm_and_farm2period_test
 
-
-
 # Test case: valid DataFrame
 def test_update_period2farm_and_farm2period_train_output(sample_df):
     " Test if the dictionaries are created correctly for a valid DataFrame. "
@@ -38,3 +36,24 @@ def test_update_period2farm_and_farm2period_train_empty_df():
     assert period2farm == {}, "period2farm should be empty for empty DataFrame."
     assert farm2period == {}, "farm2period should be empty for empty DataFrame."
     assert periodfarm2power_train == {}, "periodfarm2power_train should be empty for empty DataFrame."
+
+# Test case: valid DataFrame
+def test_update_period2farm_and_farm2period_test_output(sample_df):
+    " Test if the dictionaries are created correctly for a valid DataFrame. "
+    # Call the function with a valid DataFrame
+    periodfarm2power_test = update_period2farm_and_farm2period_test(sample_df)
+    # Assert that the dictionaries are created correctly
+    assert periodfarm2power_test == {(1, 'A'): 0.5, (2, 'B'): 1.2, (1, 'C'): 0.7, (3, 'A'): 0.8}, "periodfarm2power_test dictionary is not correct."
+
+# Test case: invalid input (not a DataFrame)
+def test_update_period2farm_and_farm2period_test_invalid_input():
+    " Test if an assertion error is raised for an invalid input. "
+    with pytest.raises(AssertionError, match="Input df must be a pandas DataFrame."):
+        update_period2farm_and_farm2period_test([1, 2, 3])
+
+# Test case: missing columns in DataFrame
+def test_update_period2farm_and_farm2period_test_missing_columns(sample_df_missing_columns):
+    " Test if an assertion error is raised for a DataFrame missing required columns. "
+    # Call the function with a DataFrame missing required columns
+    with pytest.raises(AssertionError, match="DataFrame df must contain columns 'periodId', 'farmId', and 'power_z'."):
+        update_period2farm_and_farm2period_test(sample_df_missing_columns)
