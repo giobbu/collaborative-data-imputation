@@ -5,7 +5,7 @@ from source.utils.utils_memory import update_period2farm_and_farm2period_train, 
 
 
 # Test case: valid DataFrame
-def test_update_period2farm_and_farm2period_train_valid(sample_df):
+def test_update_period2farm_and_farm2period_train_output(sample_df):
     " Test if the dictionaries are created correctly for a valid DataFrame. "
     # Call the function with a valid DataFrame
     period2farm, farm2period, periodfarm2power_train = update_period2farm_and_farm2period_train(sample_df)
