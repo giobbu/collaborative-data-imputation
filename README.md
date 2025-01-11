@@ -3,8 +3,6 @@
 
 # Collaborative-Data-Imputation
 
-### [INESC TEC Power and Energy Systems Centre](https://www.inesctec.pt/en/centres/cpes#intro)
-
 <img src="img/colab_data_imputation.png" alt="Image Alt Text" width="700"/>
 
 ### Reconstruction of wind power data
