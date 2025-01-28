@@ -1,15 +1,21 @@
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.4.0  # Use the latest version available
+    rev: v4.4.0  # Pinned version
     hooks:
       - id: trailing-whitespace  # Removes trailing whitespace
-      - id: end-of-file-fixer  # Makes sure files end in a newline and only a newline
+      - id: end-of-file-fixer  # Ensures files end with a newline
       - id: check-added-large-files  # Prevents large files from being committed
+
+  - repo: https://github.com/Yelp/detect-secrets
+    rev: v1.5.0  # Pinned version
+    hooks:
+      - id: detect-secrets
+        args: ["--baseline", ".secrets.baseline"]
 
   - repo: local
     hooks:
       - id: pytest
         name: Run pytest
-        entry: pytest  # Adjust this line if you're using a different command to run tests
+        entry: pytest  # Ensure pytest is in your PATH or adjust accordingly
         language: system
         pass_filenames: false

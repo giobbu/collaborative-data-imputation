@@ -2,6 +2,8 @@
 /mlruns/*
 /data/Y-NP.csv
 /mlartifacts/*
+planning.txt
+
 
 # Ignore IPython Notebook checkpoints
 **/ipynb_checkpoints/
