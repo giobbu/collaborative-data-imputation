@@ -8,6 +8,6 @@ dependencies = [
     "loguru>=0.7.3",
     "mlflow>=3.7.0",
     "pre-commit>=4.5.1",
-    "pytest>=9.0.2",
+    "pytest>=9.0.3",
     "sortedcontainers>=2.4.0",
 ]
